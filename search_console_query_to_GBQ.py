@@ -14,6 +14,16 @@ from oauth2client.file import Storage
 from oauth2client.client import flow_from_clientsecrets
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import pandas as pd
+from pandas.io import gbq
+
+# Define our BQ import items, replace the placeholders below with your BigQuery project ID, your private key for OAuth, 
+# your import method ('replace' will overwrite the table if it exists, 'fail' will not overwrite the table if it exists).
+
+project_id = "PROJECT_ID"
+pkey = 'MY_PRIVATE_KEY.json'
+my_table = 'MYDATESET.MYTABLE' # if table does not exist it will be created
+import_action = 'append' # 'replace' will overwrite the table if it exists, 'fail' will not overwrite the table if it exists.
 
 WEBMASTER_CREDENTIALS_FILE_PATH = "webmaster_credentials.dat"
 
@@ -237,7 +247,7 @@ def main():
             request = {
                 'startDate' : day,
                 'endDate' : day,
-                'dimensions' : ['query'],
+                'dimensions' : ["page","query"],
                 'rowLimit' : args.max_rows_per_day,
                 'dimensionFilterGroups' : [
                     {
@@ -265,14 +275,21 @@ def main():
                     filters[filter_mapping[_filter['dimension']]] = _filter['expression']
 
                 for row in response['rows']:
-                    keys = ','.join(row['keys'])
-                    output_row = [keys, row['clicks'], row['impressions'], row['ctr'], row['position']]
+                    #keys = ','.join(row['keys'])
+                    page = row['keys'][0]
+                    keyword = row['keys'][1]
+                    output_row = [day, keyword, page, row['clicks'], row['impressions'], row['ctr'], row['position']]
                     output_row.extend(filters)
                     output_rows.append(output_row)
+
 
         with open(output_file, 'w', newline="", encoding="utf-8-sig") as file_handle:
             csvwriter = csv.writer(file_handle)
             csvwriter.writerows(output_rows)
+            # Create a dataframe for the requested days data
+            df = pd.DataFrame(output_rows, columns=['Date','Query','Page','Clicks','Impressions','CTR','AVG_position','Property','Country','Device','Website'])
+            # Push this data into BigQuery
+            gbq.to_gbq(df, my_table, project_id=project_id, private_key=pkey, if_exists=import_action)
 
         logging.info("Query for %s complete", day)
 

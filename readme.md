@@ -22,7 +22,6 @@ In order to setup the BigQuery export open up the main .py file and replace the 
 
 **The BigQuery table**: Column headers are *not* included in the data sent to BigQuery, so make the table before you begin, with the following Schema:
 
-Inline-style: 
 ![alt text](https://image.ibb.co/mk9EEo/Capture.png "Sample BigQuery schema")
 
 ### Changes

@@ -17,12 +17,11 @@ from googleapiclient.errors import HttpError
 import pandas as pd
 from pandas.io import gbq
 
-# Define our BQ import items, replace the placeholders below with your BigQuery project ID, your private key for OAuth, 
-# your import method ('replace' will overwrite the table if it exists, 'fail' will not overwrite the table if it exists).
+# Define our BQ import settings: replace the placeholders below with your BigQuery project ID, your private key .json and your import method.
 
-project_id = "PROJECT_ID"
-pkey = 'MY_PRIVATE_KEY.json'
-my_table = 'MYDATESET.MYTABLE' # if table does not exist it will be created
+project_id = 'PROJECT_ID' # Your Google Cloud project ID.
+pkey = 'MY_PRIVATE_KEY.json' # see readme for help with creating the credentials and .json key.
+my_table = 'MYDATESET.MYTABLE' # see notes in the readme with regard to creating this table before running the script.
 import_action = 'append' # 'replace' will overwrite the table if it exists, 'fail' will not overwrite the table if it exists.
 
 WEBMASTER_CREDENTIALS_FILE_PATH = "webmaster_credentials.dat"

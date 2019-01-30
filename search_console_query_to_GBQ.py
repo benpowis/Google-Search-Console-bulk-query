@@ -16,6 +16,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import pandas as pd
 from pandas.io import gbq
+from google.oauth2 import service_account
+import pandas_gbq
 
 # Define our BQ import settings: replace the placeholders below with your BigQuery project ID, your private key .json and your import method.
 

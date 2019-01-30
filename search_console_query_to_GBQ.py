@@ -16,6 +16,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import pandas as pd
 from pandas.io import gbq
+from google.oauth2 import service_account
+import pandas_gbq
 
 # Define our BQ import settings: replace the placeholders below with your BigQuery project ID, your private key .json and your import method.
 
@@ -25,6 +27,8 @@ my_table = 'MYDATESET.MYTABLE' # see notes in the readme with regard to creating
 import_action = 'append' # 'replace' will overwrite the table if it exists, 'fail' will not overwrite the table if it exists.
 
 WEBMASTER_CREDENTIALS_FILE_PATH = "webmaster_credentials.dat"
+
+credentials = google.oauth2.service_account.Credentials.from_service_account_file(pkey)
 
 def rate_limit(max_per_minute):
     """
@@ -288,7 +292,7 @@ def main():
             # Create a dataframe for the requested days data
             df = pd.DataFrame(output_rows, columns=['Date','Query','Page','Clicks','Impressions','CTR','AVG_position','Property','Country','Device','Website'])
             # Push this data into BigQuery
-            gbq.to_gbq(df, my_table, project_id=project_id, private_key=pkey, if_exists=import_action)
+            gbq.to_gbq(df, my_table, project_id=project_id, credentials=credentials, if_exists=import_action)
 
         logging.info("Query for %s complete", day)
 

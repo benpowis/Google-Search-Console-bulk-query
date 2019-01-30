@@ -6,7 +6,7 @@ https://github.com/stephan765/Google-Search-Console-bulk-query
 ### Introduction
 
 Full credit for the original code goes to the project linked above where my version has been forked from.
-Since Google Search Console now allows users to export up to 16 months of historic data I was iterested in exporting this to Google BigQuery for
+Since Google Search Console now allows users to export up to 16 months of historic data I was interested in exporting this to Google BigQuery for
  further analysis. I've added functionality to the original code which, in addition to creating a .CSV of the results, also uploads them into a BigQuery table.
  
 ### Setup

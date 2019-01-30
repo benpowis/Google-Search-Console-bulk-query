@@ -16,8 +16,6 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import pandas as pd
 from pandas.io import gbq
-from google.oauth2 import service_account
-import pandas_gbq
 
 # Define our BQ import settings: replace the placeholders below with your BigQuery project ID, your private key .json and your import method.
 
@@ -41,12 +39,12 @@ def rate_limit(max_per_minute):
     def decorate(func):
         last_time_called = [0.0]
         def rate_limited_function(*args, **kwargs):
-            elapsed = time.clock() - last_time_called[0]
+            elapsed = time.process_time() - last_time_called[0]
             wait_for = min_interval - elapsed
             if wait_for > 0:
                 time.sleep(wait_for)
             ret = func(*args, **kwargs)
-            last_time_called[0] = time.clock()
+            last_time_called[0] = time.process_time()
             return ret
         return rate_limited_function
     return decorate

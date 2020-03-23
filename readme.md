@@ -3,6 +3,10 @@
 This version of the Google Search Console Bulk Query requester builds upon the work of the following project:
 https://github.com/stephan765/Google-Search-Console-bulk-query
 
+### New!
+I've rewritten my approach to downloading data from Google Search Console, check out my new repo here:
+https://github.com/benpowis/search-console-bq
+
 ### Introduction
 
 Full credit for the original code goes to the project linked above where my version has been forked from.
